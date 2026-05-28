@@ -31,19 +31,57 @@ PHONE_RE = re.compile(
     r"(\+?\d[\d\-.\s()]{7,}\d)"
 )
 EMAIL_RE = re.compile(r"[\w.+-]+@[\w-]+\.[\w.-]+")
-# Role keywords we'll watch for at the start of a line/cell
+
+# Role keywords we watch for. Each must match as a whole word/phrase to avoid
+# false positives like "pa" matching "parking" or "pages".
 ROLE_HINTS = [
-    "director", "producer", "ep ", "executive producer", "line producer",
+    "director", "producer", "ep", "executive producer", "line producer",
     "production manager", "field producer", "dp", "director of photography",
-    "1st ac", "2nd ac", "ac ", "focus puller", "gaffer", "key grip",
-    "swing", "best boy", "electrician", "sound", "boom",
-    "hmu", "hair", "makeup", "wardrobe", "stylist",
+    "1st ac", "2nd ac", "ac", "focus puller", "gaffer", "key grip",
+    "swing", "best boy", "electrician", "sound mixer", "sound", "boom op", "boom",
+    "hmu", "hair & makeup", "hair", "makeup", "wardrobe stylist", "stylist",
     "art director", "production designer", "set dresser",
-    "pa", "production assistant", "driver", "teleprompter",
+    "production assistant", "pa", "driver", "teleprompter",
     "fixer", "local producer", "casting",
-    "talent", "interviewee", "host", "presenter",
-    "client", "agency", "creative director", "account",
+    "interviewee", "host", "presenter",
+    "creative director", "account manager",
 ]
+
+# Lines containing these substrings are section headers or boilerplate, not contacts.
+_HEADER_NOISE = [
+    "call sheet", "at a glance", "logistics", "parking", "building access",
+    "schedule", "wardrobe & styling", "meals", "crafty", "allergies",
+    "notes", "rules", "etiquette", "invoicing", "production report",
+    "how to use", "talent / interviewees", "contacts", "crew",
+    "fit-to-width", "check weather", "print preview",
+    "recommended", "avoid", "confidentiality", "social media",
+    "closed set", "health & safety", "respect the location",
+    "sustainability", "on-site emergency",
+]
+
+# Build word-boundary patterns for role matching (longer phrases first)
+_ROLE_PATTERNS = sorted(ROLE_HINTS, key=len, reverse=True)
+_ROLE_RE = re.compile(
+    r"\b(" + "|".join(re.escape(r) for r in _ROLE_PATTERNS) + r")\b",
+    re.IGNORECASE,
+)
+
+
+def _is_header_noise(line: str) -> bool:
+    """Return True if the line looks like a section header, not a contact."""
+    low = line.lower()
+    # Must have a real person indicator: phone, email, or a pipe-separated name
+    has_phone = bool(PHONE_RE.search(line))
+    has_email = bool(EMAIL_RE.search(line))
+    # If no phone or email, check if the line matches known header patterns
+    if not has_phone and not has_email:
+        for noise in _HEADER_NOISE:
+            if noise in low:
+                return True
+    # Very short lines with no contact info are likely headers
+    if len(line) < 20 and not has_phone and not has_email:
+        return True
+    return False
 
 
 def _scan_text(text: str, source: str) -> list[dict]:
@@ -53,39 +91,60 @@ def _scan_text(text: str, source: str) -> list[dict]:
         line = raw.strip()
         if not line:
             continue
-        low = line.lower()
-        hit_role = next((kw for kw in ROLE_HINTS if low.startswith(kw) or f" {kw} " in low[:40]), None)
-        if not hit_role:
+
+        # Skip header/boilerplate lines
+        if _is_header_noise(line):
             continue
+
+        m = _ROLE_RE.search(line)
+        if not m:
+            continue
+
+        hit_role = m.group(1).strip()
         phones = PHONE_RE.findall(line)
         emails = EMAIL_RE.findall(line)
-        # Try to peel out a name: take text between role and phone/email
+
+        # Must have at least a phone or email to be a real contact
+        if not phones and not emails:
+            continue
+
+        # Extract name: for pipe-delimited lines (our xlsx output), split on pipes
         name = None
-        # Strip role + colon/dash
-        role_label = hit_role.strip()
-        try:
-            after_role = line.lower().split(role_label, 1)[1]
-            # original case version
-            after_role_orig = line[len(line) - len(after_role):]
-            # Remove leading punctuation
-            after_role_orig = after_role_orig.lstrip(" :|-—\t")
-            # Cut off at first phone/email
-            cutoff = len(after_role_orig)
-            for p in phones:
-                idx = after_role_orig.find(p)
-                if idx >= 0:
-                    cutoff = min(cutoff, idx)
-            for e in emails:
-                idx = after_role_orig.find(e)
-                if idx >= 0:
-                    cutoff = min(cutoff, idx)
-            name = after_role_orig[:cutoff].strip(" |\t-—")
-            # Strip parenthetical pronouns
-            name = re.sub(r"\([^)]*\)", "", name).strip()
-        except Exception:
-            pass
+        parts = [p.strip() for p in line.split("|")]
+        if len(parts) >= 3:
+            # Find which part is the role, take the next part as the name
+            for i, part in enumerate(parts):
+                if _ROLE_RE.search(part):
+                    if i + 1 < len(parts):
+                        candidate = parts[i + 1].strip()
+                        # Skip if it looks like a phone or email
+                        if not PHONE_RE.match(candidate) and not EMAIL_RE.match(candidate):
+                            name = candidate
+                    break
+        else:
+            # Fallback: extract text between role and first phone/email
+            try:
+                after_role = line[m.end():]
+                after_role = after_role.lstrip(" :|-—\t")
+                cutoff = len(after_role)
+                for p in phones:
+                    idx = after_role.find(p)
+                    if idx >= 0:
+                        cutoff = min(cutoff, idx)
+                for e in emails:
+                    idx = after_role.find(e)
+                    if idx >= 0:
+                        cutoff = min(cutoff, idx)
+                name = after_role[:cutoff].strip(" |\t-—")
+            except Exception:
+                pass
+
+        # Clean up name: strip parenthetical pronouns
+        if name:
+            name = re.sub(r"\([^)]*\)", "", name).strip(" |\t-—")
+
         entry = {
-            "role": role_label.title(),
+            "role": hit_role.title(),
             "name": name or "",
             "phone": phones[0] if phones else "",
             "email": emails[0] if emails else "",

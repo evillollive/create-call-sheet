@@ -1,0 +1,17 @@
+__pycache__/
+*.py[cod]
+*$py.class
+*.egg-info/
+dist/
+build/
+.eggs/
+*.egg
+.venv/
+venv/
+env/
+.env
+*.xlsx
+!create-call-sheet/examples/sample_output.xlsx
+*.pdf
+.DS_Store
+.callsheet-config.json
