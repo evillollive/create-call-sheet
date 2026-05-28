@@ -1,0 +1,105 @@
+{
+  "shared": {
+    "project_name": "GitHub × ASOS",
+    "client": "GitHub",
+    "production_company": "MAJORITY",
+    "agency": "",
+    "job_number": "GH-2026-014",
+    "contacts_by_department": {
+      "PRODUCTION": [
+        {"position": "Director / Producer", "name": "Alex Perrault", "pronouns": "he/him", "phone": "+1 206-919-0160", "email": "evillollive@github.com", "call": "8:00 AM", "wrap": "6:00 PM"},
+        {"position": "Producer (Majority)", "name": "Cathleen Alexander", "pronouns": "she/her", "phone": "+1 213-864-8680", "email": "ca@majorityfilm.com", "call": "8:00 AM", "wrap": "6:00 PM"}
+      ],
+      "CAMERA": [
+        {"position": "DP", "name": "Brett Bollier", "pronouns": "he/him", "phone": "+1 503-866-5518", "email": "brett.bollier@gmail.com", "call": "8:00 AM", "wrap": "6:00 PM"}
+      ],
+      "G&E": [
+        {"position": "Gaffer", "name": "Al Rice", "pronouns": "", "phone": "+44 7917 606621", "email": "al@alricelights.com", "call": "8:00 AM", "wrap": "6:00 PM"},
+        {"position": "Swing", "name": "Declan Duffy", "pronouns": "", "phone": "+44 7470 366961", "email": "derrick@declannotderrick.com", "call": "8:00 AM", "wrap": "6:00 PM"}
+      ],
+      "VANITIES": [
+        {"position": "Hair & Makeup", "name": "Dominic Skinner", "pronouns": "", "phone": "+44 7747 648953", "email": "dominiccskinner@gmail.com", "call": "9:15 AM", "wrap": "5:00 PM"}
+      ],
+      "CLIENT": [
+        {"position": "GitHub", "name": "Grace Beatty", "pronouns": "", "phone": "+34 675 628 689", "email": "gracebeatty@github.com", "call": "8:30 AM", "wrap": ""}
+      ],
+      "TALENT / INTERVIEWEES": [
+        {"position": "Interviewee", "name": "Chris Newark", "pronouns": "", "phone": "", "email": "", "call": "2:00 PM", "wrap": ""},
+        {"position": "Interviewee", "name": "Lew Holmes", "pronouns": "", "phone": "", "email": "", "call": "10:30 AM", "wrap": ""}
+      ],
+      "VENDORS": [
+        {"position": "Camera Rental", "name": "SL Vision LTD", "pronouns": "", "phone": "+44 207 720 6464", "email": "hire@slvision.co.uk", "call": "", "wrap": ""},
+        {"position": "G&E", "name": "Al Rice Lights", "pronouns": "", "phone": "+44 7917 606621", "email": "al@alricelights.com", "call": "", "wrap": ""},
+        {"position": "Insurance", "name": "Inszone Insurance", "pronouns": "", "phone": "+1 562-307-8417", "email": "tinsua@inszoneins.com", "call": "", "wrap": ""}
+      ]
+    },
+    "wardrobe": {
+      "recommended": "Solid colors that aren't pure white/black. Bring 2-3 options. Neutral, comfortable fit. Layers if outdoors.",
+      "avoid": "Tight patterns (checks, herringbone, fine stripes). Visible logos/branding. Pure white or pure black shirts. Loud jewelry. Strong fragrance."
+    },
+    "meals": {
+      "breakfast": {"vendor": "Hotel", "phone": "", "time": "Pre-shoot", "notes": "Please eat breakfast before arriving."},
+      "lunch": {"vendor": "TBD on site", "phone": "", "time": "12:00 PM", "notes": "Crew lunch on location."},
+      "crafty_/_snacks": {"vendor": "", "phone": "", "time": "All day", "notes": "Snacks, coffee, water on set."},
+      "water_/_coffee": {"vendor": "", "phone": "", "time": "", "notes": "Please bring a reusable water bottle."},
+      "allergies": "Allergies / dietary restrictions: flag to Cathleen by EOD Thursday."
+    },
+    "notes_block": [
+      "Confidentiality: this call sheet and all on-set content are confidential. Do not share externally.",
+      "Social media: NO posts, photos, or video from set without Producer approval.",
+      "Closed set: no visitors without prior approval from Producer.",
+      "Health & safety: dial 911 in any emergency. Nearest hospital listed above.",
+      "Respect the location: no smoking/vaping inside, follow all venue rules, leave it cleaner than we found it.",
+      "Sustainability: bring a reusable water bottle. Follow local laws for sorting refuse."
+    ],
+    "invoicing": {
+      "job_reference": "GH-2026-014",
+      "send_to": "ca@majorityfilm.com",
+      "billing_address": "Majority Film, 1234 Sunset Blvd, Los Angeles CA 90026",
+      "notes": "Meals up to $35/day reimbursable with receipt."
+    }
+  },
+  "days": [
+    {
+      "tab_name": "Day 1",
+      "date_label": "Friday, February 6, 2026",
+      "city_for_lookup": "London",
+      "crew_call": "8:00 AM",
+      "location": {
+        "address_line_1": "Greater London House",
+        "address_line_2": "Hampstead Rd",
+        "city_state_zip": "London NW1 7FB, United Kingdom"
+      },
+      "hospital": {
+        "name": "University College Hospital",
+        "address": "235 Euston Rd, London NW1 2BU",
+        "phone": "020 3456 7890"
+      },
+      "first_shot": "10:00 AM",
+      "wrap": "6:00 PM",
+      "lunch": "12:00 PM",
+      "sunrise": "7:25 AM",
+      "sunset": "5:02 PM",
+      "weather": "48°F, partly cloudy",
+      "parking": "Limited street parking around Hampstead Rd. Loading at front, then park in NCP Euston Garage (5 min walk). Pay for the day.",
+      "building_access": "Reception is on Ground Floor. Sign in for Grace Beatty, badge to Floor 4. Loading dock around back via service road.",
+      "on_site_contacts": [
+        {"name": "Alex Perrault", "role": "Director", "phone": "+1 206-919-0160"},
+        {"name": "Cathleen Alexander", "role": "Producer", "phone": "+1 213-864-8680"}
+      ],
+      "schedule": [
+        {"time": "8:00 AM",  "activity": "Crew arrives, load in to staging area",  "location": "Location A", "talent": "Crew", "notes": ""},
+        {"time": "9:15 AM",  "activity": "Interviewee 1 arrives for HMU",          "location": "HMU room",   "talent": "Dylan Morley", "notes": ""},
+        {"time": "10:00 AM", "activity": "INTERVIEW 1: Dylan Morley",              "location": "Location A", "talent": "Dylan Morley", "notes": "Interview + B-roll + portrait"},
+        {"time": "10:30 AM", "activity": "Interviewee 2 arrives for HMU",          "location": "HMU room",   "talent": "Lewis Holmes", "notes": ""},
+        {"time": "11:00 AM", "activity": "INTERVIEW 2: Lewis Holmes",              "location": "Location B", "talent": "Lewis Holmes", "notes": "Interview + B-roll + portrait"},
+        {"time": "12:00 PM", "activity": "Lunch",                                  "location": "On site",    "talent": "All",          "notes": ""},
+        {"time": "1:00 PM",  "activity": "INTERVIEW 3: Przemek Czarnecki",         "location": "Location B", "talent": "Przemek",      "notes": "*NO HMU*"},
+        {"time": "2:00 PM",  "activity": "Interviewee 4 arrives for HMU",          "location": "HMU room",   "talent": "Chris Newark", "notes": ""},
+        {"time": "2:30 PM",  "activity": "INTERVIEW 4: Chris Newark",              "location": "Location A", "talent": "Chris Newark", "notes": "Interview + B-roll + portrait"},
+        {"time": "3:30 PM",  "activity": "B-roll of product, devs collaborating",  "location": "Location B", "talent": "Interviewees + devs", "notes": ""},
+        {"time": "5:00 PM",  "activity": "Wrap, break down, load out",             "location": "Both",       "talent": "All crew",     "notes": ""}
+      ]
+    }
+  ]
+}
