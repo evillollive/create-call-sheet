@@ -84,7 +84,21 @@ If the city isn't in the database, ask the user for a nearby major city or skip.
 
 **Auto-lookup: nearest hospital.** Once you have the location address, do a web search for "nearest hospital to <address>" and surface 1–3 candidates with name + address + phone. Ask the user to confirm one. If you can't find anything reliable, tell the user and ask them to fill it in.
 
-**Weather:** leave blank in the answers object. The sheet includes a "Check weather →" hyperlink to Google for the user to fill in closer to the date.
+**Address autocomplete:** When the user starts typing a location or hospital address, you can validate and complete it using the Photon geocoder (OpenStreetMap data, free, no API key):
+
+```bash
+python <skill-path>/scripts/address_lookup.py "123 Main St Portland"
+```
+
+For hospital searches, prepend "hospital" to bias results:
+
+```bash
+python <skill-path>/scripts/address_lookup.py "hospital near 235 Euston Rd London"
+```
+
+Show the top results and let the user pick one. The selected result includes structured address fields (`address_line_1`, `city_state_zip`) and a `maps_url` for verification. The script sends a single HTTPS request to `photon.komoot.io` — no API key, no account, no data stored remotely.
+
+**Weather:** Ask the user if they know the weather forecast. If yes, include it in the answers. If not, leave blank — the sheet includes a "Check weather →" hyperlink.
 
 **Schedule:** ask for time blocks. Accept them in any format ("8a–9a setup", "10:00 AM interview Dylan", etc.) and normalize. Suggest a sensible default skeleton (Crew arrives → Set up → Interview 1 → … → Wrap) and let the user edit. Aim for at least 8 blocks for a half/full day.
 
@@ -96,6 +110,8 @@ Pull `profile.py read` and surface crew by department. For each department:
 - For new contacts, prompt: "Save [name] (role) to your roster for next time?" If yes, call `profile.py add-crew '{...}'`
 
 Departments in order: PRODUCTION, CAMERA, G&E, SOUND, ART, VANITIES, SUPPORT, CLIENT, AGENCY, TALENT / INTERVIEWEES, VENDORS. Skip any department the user says they don't need.
+
+**Role normalization:** When importing contacts or collecting new ones, standard abbreviations are always uppercase: DP, PA, HMU, AC, EP, G&E. "Hair & makeup" or "hair and makeup" normalizes to "HMU". "Grip" maps to the G&E department. Everything else is title-cased.
 
 ### 4. Wardrobe & styling (talent-facing)
 
@@ -220,5 +236,6 @@ Anything optional can be omitted or empty-string. The builder draws section bann
 - `scripts/profile.py` — local profile (crew, clients, notes block)
 - `scripts/sunrise_sunset.py` — astral-based daylight lookup
 - `scripts/import_contacts.py` — extracts crew from a past sheet (.pdf or .xlsx)
+- `scripts/address_lookup.py` — Photon/OpenStreetMap address autocomplete (free, no API key)
 - `scripts/export_pdf.py` — xlsx → pdf via LibreOffice
 - `examples/sample_answers.json` — complete reference of the data contract

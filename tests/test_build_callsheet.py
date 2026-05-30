@@ -77,3 +77,21 @@ class TestBuild:
                     found = True
                     break
         assert found, "Project name should appear in the sheet"
+
+    def test_location_has_maps_hyperlink(self, tmp_path, sample_answers):
+        out = tmp_path / "test.xlsx"
+        build_callsheet.build(sample_answers, out)
+        wb = load_workbook(out)
+        ws = wb["Day 1"]
+        loc_cell = ws["E9"]
+        assert loc_cell.hyperlink is not None, "Location cell should have a hyperlink"
+        assert "google.com/maps" in loc_cell.hyperlink.target
+
+    def test_hospital_has_maps_hyperlink(self, tmp_path, sample_answers):
+        out = tmp_path / "test.xlsx"
+        build_callsheet.build(sample_answers, out)
+        wb = load_workbook(out)
+        ws = wb["Day 1"]
+        hosp_cell = ws["J9"]
+        assert hosp_cell.hyperlink is not None, "Hospital cell should have a hyperlink"
+        assert "google.com/maps" in hosp_cell.hyperlink.target

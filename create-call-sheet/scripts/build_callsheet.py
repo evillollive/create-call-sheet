@@ -42,6 +42,12 @@ FONT_NAME  = "Arial"
 COLS       = 14
 
 
+def _maps_url(address: str) -> str:
+    """Build a Google Maps search URL from an address string."""
+    from urllib.parse import quote
+    return f"https://www.google.com/maps/search/?api=1&query={quote(address)}"
+
+
 # ---------- Helper: typed cell writer ----------
 def _font(size=None, bold=None, color=None, italic=None):
     kwargs = {"name": FONT_NAME}
@@ -172,12 +178,28 @@ def _build_day_tab(wb, day_data: dict, shared: dict, tab_name: str, day_idx: int
     _put(ws, "A9", f"CREW CALL\n{crew_call}",
          fill=ACCENT, font=_font(size=18, bold=True, color=ACCENT_INK),
          align=_align(h="center", v="center", wrap=True), border=border)
-    _put(ws, "E9", loc_text,
-         fill=PAPER, font=_font(size=12, bold=True, color=INK),
+
+    # Location card — clickable Google Maps link when address is present
+    loc_address = ", ".join(filter(None, [
+        loc_lines.get("address_line_1"),
+        loc_lines.get("address_line_2"),
+        loc_lines.get("city_state_zip"),
+    ]))
+    loc_cell = _put(ws, "E9", loc_text,
+         fill=PAPER,
+         font=_font(size=12, bold=True, color=LINK_FG if loc_address else INK),
          align=_align(h="center", v="center", wrap=True), border=border)
-    _put(ws, "J9", hosp_text,
-         fill=PAPER, font=_font(size=11, bold=True, color=INK),
+    if loc_address:
+        loc_cell.hyperlink = _maps_url(loc_address)
+
+    # Hospital card — clickable Google Maps link when name/address present
+    hosp_address = ", ".join(filter(None, [hosp.get("name"), hosp.get("address")]))
+    hosp_cell = _put(ws, "J9", hosp_text,
+         fill=PAPER,
+         font=_font(size=11, bold=True, color=LINK_FG if hosp_address else INK),
          align=_align(h="center", v="center", wrap=True), border=border)
+    if hosp_address:
+        hosp_cell.hyperlink = _maps_url(hosp_address)
     for rr in (9, 10, 11):
         ws.row_dimensions[rr].height = 26
 
@@ -486,7 +508,7 @@ def _build_day_tab(wb, day_data: dict, shared: dict, tab_name: str, day_idx: int
     # ----- PRODUCTION REPORT (always emitted, de-prioritized) -----
     ws.row_dimensions[r].height = 12; r += 1
     _span(ws, r, 1, COLS,
-          "PRODUCTION REPORT  (fill in during/after shoot — optional)",
+          "PRODUCTION REPORT  (fill in during/after filming — optional)",
           fill=DEEMP_BG, font=_font(size=10, bold=True, color=DEEMP_FG),
           align=_align(h="left", v="center", indent=1))
     ws.row_dimensions[r].height = 18

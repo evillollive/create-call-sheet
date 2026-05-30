@@ -20,7 +20,7 @@ class TestScanText:
         text = "DP | Brett Bollier | +1 503-866-5518 | brett@example.com"
         results = import_contacts._scan_text(text, "test")
         assert len(results) >= 1
-        dp = next(r for r in results if r["role"] == "Dp")
+        dp = next(r for r in results if r["role"] == "DP")
         assert dp["name"] == "Brett Bollier"
         assert "503" in dp["phone"]
         assert dp["email"] == "brett@example.com"
@@ -66,7 +66,34 @@ class TestScanText:
         text = "Production Assistant | Jamie | +1 555-123-4567"
         results = import_contacts._scan_text(text, "test")
         assert len(results) == 1
-        assert results[0]["role"] == "Production Assistant"
+        assert results[0]["role"] == "PA"
+
+    def test_role_normalization_uppercase(self):
+        """Standard abbreviations should always be uppercase."""
+        cases = [
+            ("dp | Someone | +1 555-0001", "DP"),
+            ("hmu | Someone | +1 555-0002", "HMU"),
+            ("pa | Someone | +1 555-0003", "PA"),
+            ("ep | Someone | +1 555-0004", "EP"),
+            ("1st ac | Someone | +1 555-0005", "1st AC"),
+        ]
+        for text, expected_role in cases:
+            results = import_contacts._scan_text(text, "test")
+            assert len(results) >= 1, f"No results for: {text}"
+            assert results[0]["role"] == expected_role, f"Expected {expected_role}, got {results[0]['role']} for: {text}"
+
+    def test_hair_and_makeup_normalizes_to_hmu(self):
+        text = "Hair & Makeup | Jordan | +1 555-0006"
+        results = import_contacts._scan_text(text, "test")
+        assert len(results) >= 1
+        assert results[0]["role"] == "HMU"
+
+    def test_grip_detected(self):
+        text = "Grip | Pat | +1 555-0007"
+        results = import_contacts._scan_text(text, "test")
+        assert len(results) >= 1
+        assert results[0]["role"] == "Grip"
+        assert results[0]["name"] == "Pat"
 
 
 class TestFromXlsx:

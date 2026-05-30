@@ -37,9 +37,9 @@ EMAIL_RE = re.compile(r"[\w.+-]+@[\w-]+\.[\w.-]+")
 ROLE_HINTS = [
     "director", "producer", "ep", "executive producer", "line producer",
     "production manager", "field producer", "dp", "director of photography",
-    "1st ac", "2nd ac", "ac", "focus puller", "gaffer", "key grip",
+    "1st ac", "2nd ac", "ac", "focus puller", "gaffer", "key grip", "grip",
     "swing", "best boy", "electrician", "sound mixer", "sound", "boom op", "boom",
-    "hmu", "hair & makeup", "hair", "makeup", "wardrobe stylist", "stylist",
+    "hmu", "hair & makeup", "hair and makeup", "hair", "makeup", "wardrobe stylist", "stylist",
     "art director", "production designer", "set dresser",
     "production assistant", "pa", "driver", "teleprompter",
     "fixer", "local producer", "casting",
@@ -65,6 +65,24 @@ _ROLE_RE = re.compile(
     r"\b(" + "|".join(re.escape(r) for r in _ROLE_PATTERNS) + r")\b",
     re.IGNORECASE,
 )
+
+# Roles that should always be uppercase abbreviations
+_UPPERCASE_ROLES: dict[str, str] = {
+    "dp": "DP", "director of photography": "DP",
+    "pa": "PA", "production assistant": "PA",
+    "hmu": "HMU", "hair & makeup": "HMU", "hair and makeup": "HMU",
+    "ac": "AC", "1st ac": "1st AC", "2nd ac": "2nd AC",
+    "ep": "EP", "executive producer": "EP",
+    "g&e": "G&E",
+}
+
+
+def normalize_role(raw: str) -> str:
+    """Normalize a role string: uppercase abbreviations, title-case everything else."""
+    key = raw.strip().lower()
+    if key in _UPPERCASE_ROLES:
+        return _UPPERCASE_ROLES[key]
+    return raw.strip().title()
 
 
 def _is_header_noise(line: str) -> bool:
@@ -144,7 +162,7 @@ def _scan_text(text: str, source: str) -> list[dict]:
             name = re.sub(r"\([^)]*\)", "", name).strip(" |\t-—")
 
         entry = {
-            "role": hit_role.title(),
+            "role": normalize_role(hit_role),
             "name": name or "",
             "phone": phones[0] if phones else "",
             "email": emails[0] if emails else "",
