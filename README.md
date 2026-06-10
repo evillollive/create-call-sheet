@@ -4,6 +4,10 @@ A Copilot agent skill that interactively builds professional video-production ca
 
 ## Quick start
 
+### Prerequisites
+
+- Python 3.10+
+
 ```bash
 pip install -r requirements.txt
 ```
