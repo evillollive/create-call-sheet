@@ -27,6 +27,16 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Stamp version
+        run: |
+          VERSION="$(git describe --tags --always --dirty 2>/dev/null || echo dev)"
+          SHA="$(git rev-parse --short HEAD)"
+          DATE="$(date -u +%Y-%m-%d)"
+          printf 'window.__APP_VERSION__ = "%s (%s · %s)";\n' "$VERSION" "$SHA" "$DATE" > web/version.js
+          echo "Stamped version.js -> $(cat web/version.js)"
 
       - name: Configure Pages
         uses: actions/configure-pages@v5

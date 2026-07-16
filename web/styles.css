@@ -225,6 +225,8 @@ textarea { resize: vertical; }
   font-size: 0.85rem;
 }
 .site-footer a { color: var(--link); }
+.site-footer .version-line { margin-top: 6px; font-size: 0.78rem; opacity: 0.8; }
+.site-footer .version-line #app-version { font-variant-numeric: tabular-nums; }
 
 .sr-only {
   position: absolute;
