@@ -92,9 +92,12 @@ Or open with any static file server. Click **Load sample** to see a complete exa
 ### Deploy to GitHub Pages
 
 A workflow at `.github/workflows/pages.yml` publishes `web/` to GitHub Pages on every
-push to `main`. To enable it once: in the repo, go to **Settings → Pages → Build and
-deployment → Source** and select **GitHub Actions**. After the next push the app is
-live at `https://<owner>.github.io/<repo>/`.
+push to `main`. The workflow enables Pages automatically (`configure-pages` with
+`enablement: true`), so no manual setup is required — on the first push to `main` the
+app is built and goes live at `https://<owner>.github.io/<repo>/`.
+
+> Requires that GitHub Pages is allowed for the repository (it is by default). If your
+> org restricts Pages, an admin may need to allow it under **Settings → Pages** first.
 
 ## Running tests
 
