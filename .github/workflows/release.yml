@@ -25,29 +25,9 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Compute next version
+      - name: Auto release
         id: compute
-        run: |
-          VERSION="$(./.github/scripts/next-version.sh)"
-          echo "version=$VERSION" >> "$GITHUB_OUTPUT"
-          echo "Next version: $VERSION"
-
-      - name: Create tag and GitHub release
-        if: steps.compute.outputs.version != 'NONE'
-        env:
-          GH_TOKEN: ${{ github.token }}
-          VERSION: ${{ steps.compute.outputs.version }}
-        run: |
-          set -euo pipefail
-          if git rev-parse "$VERSION" >/dev/null 2>&1; then
-            echo "Tag $VERSION already exists; skipping."
-            exit 0
-          fi
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git tag -a "$VERSION" -m "$VERSION"
-          git push origin "$VERSION"
-          gh release create "$VERSION" --title "$VERSION" --generate-notes
+        uses: ./.github/actions/auto-release
 
   deploy:
     needs: release

@@ -107,7 +107,7 @@ Releases are **fully automated** — you never bump a version by hand. On every 
 1. Reads the commit messages since the last tag and computes the next
    [semantic version](https://semver.org/) using
    [Conventional Commits](https://www.conventionalcommits.org/)
-   (via [`.github/scripts/next-version.sh`](.github/scripts/next-version.sh)):
+   (via the [`auto-release`](.github/actions/auto-release/) composite action):
    - `feat!:` / `feat(x)!:` or a `BREAKING CHANGE:` footer → **major**
    - `feat:` → **minor**
    - `fix:` / `perf:` / anything else → **patch**
@@ -117,6 +117,28 @@ Releases are **fully automated** — you never bump a version by hand. On every 
 
 To land a change without shipping a release, keep it on a branch — versions are only
 cut when commits reach `main`.
+
+### Reuse in other repositories
+
+The versioning logic is packaged as a standalone composite action
+([`.github/actions/auto-release`](.github/actions/auto-release/)) that any repo can call
+in a single step — no need to copy scripts around:
+
+```yaml
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: evillollive/create-call-sheet/.github/actions/auto-release@v1
+```
+
+See the [action README](.github/actions/auto-release/README.md) for inputs, outputs, and
+a compute-only mode.
 
 ## Running tests
 
