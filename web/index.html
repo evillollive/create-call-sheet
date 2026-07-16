@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; font-src 'self'; connect-src 'self' https://photon.komoot.io https://api.open-meteo.com; base-uri 'self'; form-action 'self'; object-src 'none'" />
+  <meta name="referrer" content="no-referrer" />
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='5' fill='%23111'/%3E%3Crect x='6' y='7' width='20' height='4' fill='%23FFD400'/%3E%3Crect x='6' y='14' width='20' height='2' fill='%23bbb'/%3E%3Crect x='6' y='19' width='20' height='2' fill='%23bbb'/%3E%3Crect x='6' y='24' width='12' height='2' fill='%23bbb'/%3E%3C/svg%3E" />
+  <title>Create Call Sheet — build a production call sheet in your browser</title>
+  <meta name="description" content="Build a polished video-production call sheet and download it as a styled .xlsx — entirely in your browser. No account, no AI, no data leaves your device." />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <header class="site-header">
+    <div class="wrap">
+      <h1>Create Call Sheet</h1>
+      <p class="tagline">Build a polished production call sheet and download it as a styled <code>.xlsx</code> — right in your browser. Nothing is uploaded.</p>
+    </div>
+  </header>
+
+  <div class="toolbar" role="region" aria-label="Actions">
+    <div class="wrap toolbar-inner">
+      <button type="button" id="btn-generate" class="btn btn-primary">Generate .xlsx</button>
+      <button type="button" id="btn-load-sample" class="btn">Load sample</button>
+      <button type="button" id="btn-reset" class="btn btn-ghost">Reset form</button>
+      <p id="status" class="status" role="status" aria-live="polite"></p>
+    </div>
+  </div>
+
+  <main id="main" class="wrap">
+
+    <!-- ============ PROFILE ============ -->
+    <section aria-labelledby="profile-h" class="card">
+      <details id="profile-details">
+        <summary id="profile-h"><span class="section-title">Your profile &amp; roster</span> <span class="muted">— saved in this browser only</span></summary>
+        <div class="details-body">
+          <p class="help">Save recurring crew, your standard notes block, and reminders. This lives in your browser's local storage and never leaves your device.</p>
+
+          <h3>Crew roster</h3>
+          <div id="roster-list" class="roster-list" aria-live="polite"></div>
+          <div class="row">
+            <label>Role <input type="text" id="roster-role" placeholder="DP" /></label>
+            <label>Name <input type="text" id="roster-name" placeholder="Brett Bollier" /></label>
+            <label>Phone <input type="text" id="roster-phone" placeholder="+1 503…" /></label>
+            <label>Email <input type="email" id="roster-email" placeholder="name@example.com" /></label>
+            <label>Pronouns <input type="text" id="roster-pronouns" placeholder="he/him" /></label>
+            <button type="button" id="btn-roster-add" class="btn">Add to roster</button>
+          </div>
+
+          <h3>Import crew from a past call sheet (.xlsx)</h3>
+          <label class="file-label">
+            <input type="file" id="import-file" accept=".xlsx,.xlsm" />
+          </label>
+          <div id="import-results" class="import-results" aria-live="polite"></div>
+
+          <h3>Standard notes block</h3>
+          <label for="profile-notes" class="sr-only">Standard notes, one per line</label>
+          <textarea id="profile-notes" rows="6" placeholder="One note per line"></textarea>
+          <button type="button" id="btn-notes-save" class="btn">Save notes to profile</button>
+
+          <h3>Profile data</h3>
+          <div class="row">
+            <button type="button" id="btn-profile-export" class="btn btn-ghost">Export profile (JSON)</button>
+            <label class="file-label btn btn-ghost">Import profile (JSON)
+              <input type="file" id="profile-import-file" accept=".json" hidden />
+            </label>
+            <button type="button" id="btn-profile-clear" class="btn btn-ghost">Clear profile</button>
+          </div>
+        </div>
+      </details>
+    </section>
+
+    <!-- ============ PROJECT ============ -->
+    <section class="card">
+      <h2 class="section-title">1. Project</h2>
+      <fieldset>
+        <legend class="sr-only">Project details</legend>
+        <div class="grid">
+          <label>Project name <input type="text" id="project_name" /></label>
+          <label>Client <input type="text" id="client" list="clients-list" /></label>
+          <datalist id="clients-list"></datalist>
+          <label>Production company <input type="text" id="production_company" /></label>
+          <label>Agency <span class="muted">(optional)</span> <input type="text" id="agency" /></label>
+          <label>Job number / reference <span class="muted">(optional)</span> <input type="text" id="job_number" /></label>
+        </div>
+      </fieldset>
+    </section>
+
+    <!-- ============ DAYS ============ -->
+    <section class="card">
+      <h2 class="section-title">2. Shoot days</h2>
+      <div id="days-container"></div>
+      <button type="button" id="btn-add-day" class="btn">+ Add another day</button>
+    </section>
+
+    <!-- ============ CONTACTS ============ -->
+    <section class="card">
+      <h2 class="section-title">3. Contacts</h2>
+      <p class="help">Add crew, client, talent and vendors by department. Use “Fill from roster” to pull saved people.</p>
+      <div id="departments-container"></div>
+    </section>
+
+    <!-- ============ WARDROBE ============ -->
+    <section class="card">
+      <h2 class="section-title">4. Wardrobe &amp; styling <span class="muted">(optional)</span></h2>
+      <fieldset>
+        <legend class="sr-only">Wardrobe guidance</legend>
+        <div class="grid two">
+          <label>Recommended
+            <textarea id="wardrobe_recommended" rows="3"></textarea>
+          </label>
+          <label>Avoid
+            <textarea id="wardrobe_avoid" rows="3"></textarea>
+          </label>
+        </div>
+        <button type="button" id="btn-wardrobe-defaults" class="btn btn-ghost">Use template defaults</button>
+      </fieldset>
+    </section>
+
+    <!-- ============ MEALS ============ -->
+    <section class="card">
+      <h2 class="section-title">5. Meals <span class="muted">(optional)</span></h2>
+      <div class="table-scroll">
+        <table class="grid-table" id="meals-table">
+          <thead>
+            <tr><th scope="col">Meal</th><th scope="col">Vendor</th><th scope="col">Phone</th><th scope="col">Time</th><th scope="col">Notes</th></tr>
+          </thead>
+          <tbody id="meals-body"></tbody>
+        </table>
+      </div>
+      <label>Allergy / dietary reminder
+        <input type="text" id="meals_allergies" />
+      </label>
+    </section>
+
+    <!-- ============ NOTES ============ -->
+    <section class="card">
+      <h2 class="section-title">6. Notes &amp; rules</h2>
+      <label for="notes_block" class="sr-only">Notes, one per line</label>
+      <textarea id="notes_block" rows="6" placeholder="One note per line"></textarea>
+      <button type="button" id="btn-notes-from-profile" class="btn btn-ghost">Load from profile</button>
+    </section>
+
+    <!-- ============ INVOICING ============ -->
+    <section class="card">
+      <h2 class="section-title">7. Invoicing <span class="muted">(optional)</span></h2>
+      <fieldset>
+        <legend class="sr-only">Invoicing details</legend>
+        <div class="grid two">
+          <label>Job reference <input type="text" id="inv_job_reference" /></label>
+          <label>Send invoices to (email) <input type="email" id="inv_send_to" /></label>
+          <label>Billing address <input type="text" id="inv_billing_address" /></label>
+          <label>Reimbursable / per diem notes <input type="text" id="inv_notes" /></label>
+        </div>
+      </fieldset>
+    </section>
+
+    <section class="card generate-card">
+      <button type="button" id="btn-generate-2" class="btn btn-primary btn-lg">Generate call sheet (.xlsx)</button>
+      <p id="validation" class="validation" role="alert" aria-live="assertive"></p>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="wrap">
+      <p>Runs entirely in your browser. Address lookups use <a href="https://photon.komoot.io/" rel="noopener noreferrer">Photon/OpenStreetMap</a>; sunrise/sunset uses <a href="https://open-meteo.com/" rel="noopener noreferrer">Open-Meteo</a> — both free, no key, no tracking.</p>
+    </div>
+  </footer>
+
+  <!-- ===== Templates for repeated rows ===== -->
+  <template id="tpl-day">
+    <fieldset class="day-fieldset">
+      <legend>Day <span class="day-num"></span> <button type="button" class="btn btn-ghost btn-sm day-remove">Remove</button></legend>
+      <div class="grid">
+        <label>Tab name <input type="text" data-f="tab_name" /></label>
+        <label>Date <input type="text" data-f="date_label" placeholder="Friday, February 6, 2026" /></label>
+        <label>City (for sunrise/sunset) <input type="text" data-f="city_for_lookup" /></label>
+        <label>Shoot date <input type="date" data-f="_date_iso" /></label>
+        <label>Crew call <input type="text" data-f="crew_call" placeholder="8:00 AM" /></label>
+      </div>
+
+      <h4>Location</h4>
+      <div class="grid">
+        <label class="span2">Address search
+          <div class="lookup">
+            <input type="text" class="addr-search" placeholder="Type an address…" />
+            <button type="button" class="btn btn-sm addr-go">Search</button>
+          </div>
+          <ul class="lookup-results addr-results" aria-live="polite"></ul>
+        </label>
+        <label>Address line 1 <input type="text" data-f="location.address_line_1" /></label>
+        <label>Address line 2 <input type="text" data-f="location.address_line_2" /></label>
+        <label>City, State ZIP <input type="text" data-f="location.city_state_zip" /></label>
+      </div>
+
+      <h4>Nearest hospital</h4>
+      <div class="grid">
+        <label class="span2">Hospital search
+          <div class="lookup">
+            <input type="text" class="hosp-search" placeholder="hospital near…" />
+            <button type="button" class="btn btn-sm hosp-go">Search</button>
+          </div>
+          <ul class="lookup-results hosp-results" aria-live="polite"></ul>
+        </label>
+        <label>Name <input type="text" data-f="hospital.name" /></label>
+        <label>Address <input type="text" data-f="hospital.address" /></label>
+        <label>Phone <input type="text" data-f="hospital.phone" /></label>
+      </div>
+
+      <h4>Quick info</h4>
+      <div class="grid">
+        <label>First shot <input type="text" data-f="first_shot" /></label>
+        <label>Wrap <input type="text" data-f="wrap" /></label>
+        <label>Lunch <input type="text" data-f="lunch" /></label>
+        <label>Sunrise <input type="text" data-f="sunrise" /></label>
+        <label>Sunset <input type="text" data-f="sunset" /></label>
+        <label>Weather <input type="text" data-f="weather" /></label>
+        <button type="button" class="btn btn-sm sun-lookup">Look up sunrise/sunset</button>
+      </div>
+
+      <h4>Logistics</h4>
+      <div class="grid two">
+        <label>Parking <textarea data-f="parking" rows="2"></textarea></label>
+        <label>Building access / load in <textarea data-f="building_access" rows="2"></textarea></label>
+      </div>
+
+      <h4>On-site emergency contacts</h4>
+      <div class="table-scroll">
+        <table class="grid-table onsite-table">
+          <thead><tr><th scope="col">Name</th><th scope="col">Role</th><th scope="col">Phone</th><th scope="col"><span class="sr-only">Actions</span></th></tr></thead>
+          <tbody class="onsite-body"></tbody>
+        </table>
+      </div>
+      <button type="button" class="btn btn-sm onsite-add">+ Add contact</button>
+
+      <h4>Schedule</h4>
+      <div class="table-scroll">
+        <table class="grid-table schedule-table">
+          <thead><tr><th scope="col">Time</th><th scope="col">Activity</th><th scope="col">Location</th><th scope="col">Talent</th><th scope="col">Notes</th><th scope="col"><span class="sr-only">Actions</span></th></tr></thead>
+          <tbody class="schedule-body"></tbody>
+        </table>
+      </div>
+      <div class="row">
+        <button type="button" class="btn btn-sm schedule-add">+ Add row</button>
+        <button type="button" class="btn btn-sm btn-ghost schedule-skeleton">Insert default skeleton</button>
+      </div>
+    </fieldset>
+  </template>
+
+  <template id="tpl-onsite-row">
+    <tr>
+      <td><input type="text" data-f="name" aria-label="On-site contact name" /></td>
+      <td><input type="text" data-f="role" aria-label="On-site contact role" /></td>
+      <td><input type="text" data-f="phone" aria-label="On-site contact phone" /></td>
+      <td><button type="button" class="btn btn-ghost btn-sm row-remove" aria-label="Remove contact">✕</button></td>
+    </tr>
+  </template>
+
+  <template id="tpl-schedule-row">
+    <tr>
+      <td><input type="text" data-f="time" aria-label="Schedule time" /></td>
+      <td><input type="text" data-f="activity" aria-label="Schedule activity" /></td>
+      <td><input type="text" data-f="location" aria-label="Schedule location" /></td>
+      <td><input type="text" data-f="talent" aria-label="Schedule talent" /></td>
+      <td><input type="text" data-f="notes" aria-label="Schedule notes" /></td>
+      <td><button type="button" class="btn btn-ghost btn-sm row-remove" aria-label="Remove row">✕</button></td>
+    </tr>
+  </template>
+
+  <template id="tpl-contact-row">
+    <tr>
+      <td><input type="text" data-f="position" aria-label="Position" /></td>
+      <td><input type="text" data-f="name" aria-label="Name" /></td>
+      <td><input type="text" data-f="pronouns" aria-label="Pronouns" /></td>
+      <td><input type="text" data-f="phone" aria-label="Phone" /></td>
+      <td><input type="email" data-f="email" aria-label="Email" /></td>
+      <td><input type="text" data-f="call" aria-label="Call time" /></td>
+      <td><input type="text" data-f="wrap" aria-label="Wrap time" /></td>
+      <td>
+        <button type="button" class="btn btn-ghost btn-sm contact-save" aria-label="Save to roster">💾</button>
+        <button type="button" class="btn btn-ghost btn-sm row-remove" aria-label="Remove contact">✕</button>
+      </td>
+    </tr>
+  </template>
+
+  <script src="vendor/exceljs.min.js"></script>
+  <script src="js/profile.js"></script>
+  <script src="js/lookups.js"></script>
+  <script src="js/importer.js"></script>
+  <script src="js/builder.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
