@@ -689,6 +689,9 @@
     });
 
     renderClientList();
+
+    const verEl = document.getElementById("app-version");
+    if (verEl && window.__APP_VERSION__) verEl.textContent = window.__APP_VERSION__;
   }
 
   if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", init);
