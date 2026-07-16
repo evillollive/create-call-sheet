@@ -91,13 +91,32 @@ Or open with any static file server. Click **Load sample** to see a complete exa
 
 ### Deploy to GitHub Pages
 
-A workflow at `.github/workflows/pages.yml` publishes `web/` to GitHub Pages on every
-push to `main`. The workflow enables Pages automatically (`configure-pages` with
-`enablement: true`), so no manual setup is required — on the first push to `main` the
-app is built and goes live at `https://<owner>.github.io/<repo>/`.
+The [`.github/workflows/release.yml`](.github/workflows/release.yml) workflow publishes
+`web/` to GitHub Pages on every push to `main`. It enables Pages automatically
+(`configure-pages` with `enablement: true`), so no manual setup is required — on the
+first push to `main` the app is built and goes live at `https://<owner>.github.io/<repo>/`.
 
 > Requires that GitHub Pages is allowed for the repository (it is by default). If your
 > org restricts Pages, an admin may need to allow it under **Settings → Pages** first.
+
+## Versioning & releases
+
+Releases are **fully automated** — you never bump a version by hand. On every push to
+`main`, `release.yml`:
+
+1. Reads the commit messages since the last tag and computes the next
+   [semantic version](https://semver.org/) using
+   [Conventional Commits](https://www.conventionalcommits.org/)
+   (via [`.github/scripts/next-version.sh`](.github/scripts/next-version.sh)):
+   - `feat!:` / `feat(x)!:` or a `BREAKING CHANGE:` footer → **major**
+   - `feat:` → **minor**
+   - `fix:` / `perf:` / anything else → **patch**
+2. Creates the git tag and a GitHub Release with auto-generated notes.
+3. Deploys `web/` to Pages, stamping the new version into `web/version.js` so the app
+   footer always shows exactly what's live (e.g. `v1.3.0 (abc1234 · 2026-07-16)`).
+
+To land a change without shipping a release, keep it on a branch — versions are only
+cut when commits reach `main`.
 
 ## Running tests
 
