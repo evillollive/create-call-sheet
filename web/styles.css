@@ -46,6 +46,8 @@ body {
   padding: 24px 0;
 }
 .site-header h1 { margin: 0 0 4px; font-size: 1.9rem; letter-spacing: 0.5px; }
+.site-logo { margin: 0 0 10px; line-height: 0; }
+.site-logo img { display: block; width: clamp(210px, 40vw, 300px); height: auto; }
 .tagline { margin: 0; color: #e4e4e7; max-width: 60ch; }
 code { background: rgba(255,255,255,0.15); padding: 1px 5px; border-radius: 4px; }
 

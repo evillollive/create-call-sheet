@@ -1,3 +1,10 @@
+<p align="center">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="web/assets/logo-dark.svg" />
+    <img alt="Create Call Sheet" src="web/assets/logo.svg" width="320" />
+  </picture>
+</p>
+
 # create-call-sheet
 
 A Copilot agent skill that interactively builds professional video-production call sheets. It walks the user through a section-by-section interview — project info, locations, schedule, crew, meals, wardrobe, notes, invoicing — then renders a polished `.xlsx` workbook (and optionally `.pdf`).

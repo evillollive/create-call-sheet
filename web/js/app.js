@@ -148,7 +148,7 @@
         setDayField(fs, "sunset", sun.sunset);
         status("Sunrise/sunset filled in.", "ok");
       } catch (e) {
-        status("Lookup failed: " + e.message + " — enter manually.", "err");
+        status("Lookup failed: " + e.message + ". Enter manually.", "err");
       }
     });
   }
@@ -260,7 +260,7 @@
       const btn = document.createElement("button");
       btn.type = "button";
       btn.className = "btn btn-sm btn-ghost";
-      btn.textContent = `${c.role || "?"} — ${c.name || ""}`;
+      btn.textContent = `${c.role || "?"} · ${c.name || ""}`;
       btn.addEventListener("click", () => {
         addContactRow(block, { position: c.role, name: c.name, pronouns: c.pronouns, phone: c.phone, email: c.email });
       });
@@ -315,7 +315,7 @@
     crew.forEach((c) => {
       const chip = document.createElement("span");
       chip.className = "roster-chip";
-      chip.appendChild(document.createTextNode(`${c.role || "?"} — ${c.name || ""}`));
+      chip.appendChild(document.createTextNode(`${c.role || "?"} · ${c.name || ""}`));
       const rm = document.createElement("button");
       rm.type = "button";
       rm.setAttribute("aria-label", `Remove ${c.name || c.role} from roster`);
@@ -433,7 +433,7 @@
     const vEl = $("#validation");
     if (problems.length) {
       vEl.className = "validation";
-      vEl.textContent = "Heads up:\n• " + problems.join("\n• ") + "\n\nGenerating anyway — fields left blank show as placeholders.";
+      vEl.textContent = "Heads up:\n• " + problems.join("\n• ") + "\n\nGenerating anyway. Fields left blank show as placeholders.";
     } else {
       vEl.className = "validation ok";
       vEl.textContent = "Looks complete.";
@@ -489,7 +489,7 @@
         cb.checked = true;
         cb.dataset.idx = idx;
         lab.appendChild(cb);
-        lab.appendChild(document.createTextNode(` ${c.role} — ${c.name || "(no name)"} ${c.phone || ""} ${c.email || ""}`));
+        lab.appendChild(document.createTextNode(` ${c.role} · ${c.name || "(no name)"} ${c.phone || ""} ${c.email || ""}`));
         div.appendChild(lab);
         results.appendChild(div);
       });

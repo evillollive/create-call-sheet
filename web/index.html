@@ -5,9 +5,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; font-src 'self'; connect-src 'self' https://photon.komoot.io https://api.open-meteo.com; base-uri 'self'; form-action 'self'; object-src 'none'" />
   <meta name="referrer" content="no-referrer" />
-  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='5' fill='%23111'/%3E%3Crect x='6' y='7' width='20' height='4' fill='%23FFD400'/%3E%3Crect x='6' y='14' width='20' height='2' fill='%23bbb'/%3E%3Crect x='6' y='19' width='20' height='2' fill='%23bbb'/%3E%3Crect x='6' y='24' width='12' height='2' fill='%23bbb'/%3E%3C/svg%3E" />
-  <title>Create Call Sheet — build a production call sheet in your browser</title>
-  <meta name="description" content="Build a polished video-production call sheet and download it as a styled .xlsx — entirely in your browser. No account, no AI, no data leaves your device." />
+  <link rel="icon" type="image/svg+xml" href="assets/favicon.svg" />
+  <title>Create Call Sheet: build a production call sheet in your browser</title>
+  <meta name="description" content="Build a polished video-production call sheet and download it as a styled .xlsx, entirely in your browser. No account, no AI, no data leaves your device." />
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
@@ -15,8 +15,10 @@
 
   <header class="site-header">
     <div class="wrap">
-      <h1>Create Call Sheet</h1>
-      <p class="tagline">Build a polished production call sheet and download it as a styled <code>.xlsx</code> — right in your browser. Nothing is uploaded.</p>
+      <h1 class="site-logo">
+        <img src="assets/logo-dark.svg" alt="Create Call Sheet" width="300" height="72" />
+      </h1>
+      <p class="tagline">Build a polished production call sheet and download it as a styled <code>.xlsx</code>, right in your browser. Nothing is uploaded.</p>
     </div>
   </header>
 
@@ -34,7 +36,7 @@
     <!-- ============ PROFILE ============ -->
     <section aria-labelledby="profile-h" class="card">
       <details id="profile-details">
-        <summary id="profile-h"><span class="section-title">Your profile &amp; roster</span> <span class="muted">— saved in this browser only</span></summary>
+        <summary id="profile-h"><span class="section-title">Your profile &amp; roster</span> <span class="muted">(saved in this browser only)</span></summary>
         <div class="details-body">
           <p class="help">Save recurring crew, your standard notes block, and reminders. This lives in your browser's local storage and never leaves your device.</p>
 
@@ -165,7 +167,7 @@
 
   <footer class="site-footer">
     <div class="wrap">
-      <p>Runs entirely in your browser. Address lookups use <a href="https://photon.komoot.io/" rel="noopener noreferrer">Photon/OpenStreetMap</a>; sunrise/sunset uses <a href="https://open-meteo.com/" rel="noopener noreferrer">Open-Meteo</a> — both free, no key, no tracking.</p>
+      <p>Runs entirely in your browser. Address lookups use <a href="https://photon.komoot.io/" rel="noopener noreferrer">Photon/OpenStreetMap</a>; sunrise/sunset uses <a href="https://open-meteo.com/" rel="noopener noreferrer">Open-Meteo</a>. Both are free, no key, no tracking.</p>
       <p class="version-line">Version <span id="app-version">dev</span></p>
     </div>
   </footer>
