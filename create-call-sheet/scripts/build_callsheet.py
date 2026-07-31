@@ -508,7 +508,7 @@ def _build_day_tab(wb, day_data: dict, shared: dict, tab_name: str, day_idx: int
     # ----- PRODUCTION REPORT (always emitted, de-prioritized) -----
     ws.row_dimensions[r].height = 12; r += 1
     _span(ws, r, 1, COLS,
-          "PRODUCTION REPORT  (fill in during/after filming — optional)",
+          "PRODUCTION REPORT  (fill in during/after filming, optional)",
           fill=DEEMP_BG, font=_font(size=10, bold=True, color=DEEMP_FG),
           align=_align(h="left", v="center", indent=1))
     ws.row_dimensions[r].height = 18
@@ -575,13 +575,13 @@ def _build_howto_tab(wb):
     w(5, "")
     w(6, "EDITING", size=13, bold=True, height=24)
     w(7, "All gray cells are fill-ins. Yellow cells are highlighted call-outs.")
-    w(8, "Anything in [ brackets ] is a placeholder — replace with shoot info.")
+    w(8, "Anything in [ brackets ] is a placeholder; replace with shoot info.")
     w(9, "")
     w(10, "PRINTING", size=13, bold=True, height=24)
     w(11, "Pages are set to fit-to-width, portrait. Adjust in Print Preview if needed.")
     w(12, "")
     w(13, "WEATHER / SUNRISE", size=13, bold=True, height=24)
-    w(14, "Sunrise and sunset are pre-filled where possible. Weather is left blank — click the 'Check weather' link in the quick-info ribbon to look it up.")
+    w(14, "Sunrise and sunset are pre-filled where possible. Weather is left blank. Click the 'Check weather' link in the quick-info ribbon to look it up.")
 
 
 # ---------- Entry point ----------

@@ -3,7 +3,7 @@
 Automatically compute the next [semantic version](https://semver.org/) from
 [Conventional Commits](https://www.conventionalcommits.org/) since the last tag,
 and (optionally) create the git tag and a GitHub Release. Zero manual version
-bumps — just merge `feat:` / `fix:` commits and a release is cut for you.
+bumps, just merge `feat:` / `fix:` commits and a release is cut for you.
 
 ## Bump rules
 
