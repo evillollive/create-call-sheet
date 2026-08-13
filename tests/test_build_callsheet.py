@@ -73,7 +73,7 @@ class TestBuild:
         found = False
         for row in ws.iter_rows(min_row=1, max_row=10, values_only=True):
             for cell in row:
-                if cell and "GitHub" in str(cell) and "ASOS" in str(cell):
+                if cell and "Acme Widgets" in str(cell) and "Northwind" in str(cell):
                     found = True
                     break
         assert found, "Project name should appear in the sheet"

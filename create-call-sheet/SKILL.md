@@ -100,12 +100,12 @@ Show the top results and let the user pick one. The selected result includes str
 
 **Weather:** Ask the user if they know the weather forecast. If yes, include it in the answers. If not, leave blank; the sheet includes a "Check weather →" hyperlink.
 
-**Schedule:** ask for time blocks. Accept them in any format ("8a–9a setup", "10:00 AM interview Dylan", etc.) and normalize. Suggest a sensible default skeleton (Crew arrives → Set up → Interview 1 → … → Wrap) and let the user edit. Aim for at least 8 blocks for a half/full day.
+**Schedule:** ask for time blocks. Accept them in any format ("8a–9a setup", "10:00 AM interview Jamie", etc.) and normalize. Suggest a sensible default skeleton (Crew arrives → Set up → Interview 1 → … → Wrap) and let the user edit. Aim for at least 8 blocks for a half/full day.
 
 ### 3. Contacts (shared across all days)
 
 Pull `profile.py read` and surface crew by department. For each department:
-- Show suggested contacts from the profile (e.g., "DP, Brett Bollier, +1 503..., use?")
+- Show suggested contacts from the profile (e.g., "DP, Casey Lin, +1 555..., use?")
 - Ask: confirm, swap, add new, or skip
 - For new contacts, prompt: "Save [name] (role) to your roster for next time?" If yes, call `profile.py add-crew '{...}'`
 

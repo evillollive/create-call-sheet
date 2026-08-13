@@ -17,13 +17,13 @@ class TestScanText:
     """Test the core heuristic parser."""
 
     def test_extracts_contact_with_phone(self):
-        text = "DP | Brett Bollier | +1 503-866-5518 | brett@example.com"
+        text = "DP | Casey Lin | +1 555-010-0102 | casey@example.com"
         results = import_contacts._scan_text(text, "test")
         assert len(results) >= 1
         dp = next(r for r in results if r["role"] == "DP")
-        assert dp["name"] == "Brett Bollier"
-        assert "503" in dp["phone"]
-        assert dp["email"] == "brett@example.com"
+        assert dp["name"] == "Casey Lin"
+        assert "555" in dp["phone"]
+        assert dp["email"] == "casey@example.com"
 
     def test_rejects_header_lines(self):
         headers = [
@@ -45,10 +45,10 @@ class TestScanText:
 
     def test_multiple_contacts(self):
         text = (
-            "Director | Alex | +1 206-555-0001 | alex@example.com\n"
-            "Gaffer | Al Rice | +44 7917 606621 | al@example.com\n"
+            "Director | Jordan | +1 206-555-0001 | jordan@example.com\n"
+            "Gaffer | Sam Doe | +1 555-010-0103 | sam@example.com\n"
             "Some random line about parking\n"
-            "Swing | Declan | +44 7470 366961\n"
+            "Swing | Robin | +1 555-010-0106\n"
         )
         results = import_contacts._scan_text(text, "test")
         roles = [r["role"] for r in results]
@@ -104,8 +104,8 @@ class TestFromXlsx:
         candidates = result["candidates"]
         # Should find real contacts, not header noise
         names = [c["name"] for c in candidates if c["name"]]
-        assert any("Brett" in n for n in names), f"Should find Brett Bollier, got: {names}"
-        assert any("Al Rice" in n for n in names), f"Should find Al Rice, got: {names}"
+        assert any("Casey" in n for n in names), f"Should find Casey Lin, got: {names}"
+        assert any("Sam Doe" in n for n in names), f"Should find Sam Doe, got: {names}"
         # Should NOT have header junk
         for c in candidates:
             assert "PARKING" not in c.get("name", "").upper()
