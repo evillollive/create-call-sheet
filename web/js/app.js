@@ -522,17 +522,17 @@
   // ---------- Sample ----------
   const SAMPLE = {
     shared: {
-      project_name: "GitHub × ASOS", client: "GitHub", production_company: "MAJORITY",
-      agency: "", job_number: "GH-2026-014",
+      project_name: "Acme Widgets × Northwind", client: "Acme Widgets", production_company: "SAMPLE STUDIOS",
+      agency: "", job_number: "SAMPLE-2026-001",
       contacts_by_department: {
         PRODUCTION: [
-          { position: "Director / Producer", name: "Alex Perrault", pronouns: "he/him", phone: "+1 206-919-0160", email: "evillollive@github.com", call: "8:00 AM", wrap: "6:00 PM" },
-          { position: "Producer (Majority)", name: "Cathleen Alexander", pronouns: "she/her", phone: "+1 213-864-8680", email: "ca@majorityfilm.com", call: "8:00 AM", wrap: "6:00 PM" },
+          { position: "Director / Producer", name: "Jordan Rivers", pronouns: "they/them", phone: "+1 555-010-0100", email: "jordan.rivers@example.com", call: "8:00 AM", wrap: "6:00 PM" },
+          { position: "Producer (Sample Studios)", name: "Morgan Blake", pronouns: "she/her", phone: "+1 555-010-0101", email: "morgan.blake@example.com", call: "8:00 AM", wrap: "6:00 PM" },
         ],
-        CAMERA: [{ position: "DP", name: "Brett Bollier", pronouns: "he/him", phone: "+1 503-866-5518", email: "brett.bollier@gmail.com", call: "8:00 AM", wrap: "6:00 PM" }],
-        "G&E": [{ position: "Gaffer", name: "Al Rice", pronouns: "", phone: "+44 7917 606621", email: "al@alricelights.com", call: "8:00 AM", wrap: "6:00 PM" }],
-        VANITIES: [{ position: "Hair & Makeup", name: "Dominic Skinner", pronouns: "", phone: "+44 7747 648953", email: "dominiccskinner@gmail.com", call: "9:15 AM", wrap: "5:00 PM" }],
-        CLIENT: [{ position: "GitHub", name: "Grace Beatty", pronouns: "", phone: "+34 675 628 689", email: "gracebeatty@github.com", call: "8:30 AM", wrap: "" }],
+        CAMERA: [{ position: "DP", name: "Casey Lin", pronouns: "he/him", phone: "+1 555-010-0102", email: "casey.lin@example.com", call: "8:00 AM", wrap: "6:00 PM" }],
+        "G&E": [{ position: "Gaffer", name: "Sam Doe", pronouns: "", phone: "+1 555-010-0103", email: "sam.doe@example.com", call: "8:00 AM", wrap: "6:00 PM" }],
+        VANITIES: [{ position: "Hair & Makeup", name: "Taylor Quinn", pronouns: "", phone: "+1 555-010-0104", email: "taylor.quinn@example.com", call: "9:15 AM", wrap: "5:00 PM" }],
+        CLIENT: [{ position: "Acme Widgets", name: "Riley Stone", pronouns: "", phone: "+1 555-010-0105", email: "riley.stone@example.com", call: "8:30 AM", wrap: "" }],
       },
       wardrobe: WARDROBE_DEFAULTS,
       meals: {
@@ -543,26 +543,26 @@
       },
       notes_block: Profile.emptyProfile().notes_block,
       invoicing: {
-        job_reference: "GH-2026-014", send_to: "ca@majorityfilm.com",
-        billing_address: "Majority Film, 1234 Sunset Blvd, Los Angeles CA 90026",
+        job_reference: "SAMPLE-2026-001", send_to: "billing@example.com",
+        billing_address: "Sample Studios, 100 Example Ave, Anytown CA 90000",
         notes: "Meals up to $35/day reimbursable with receipt.",
       },
     },
     days: [{
       tab_name: "Day 1", date_label: "Friday, February 6, 2026", city_for_lookup: "London",
       crew_call: "8:00 AM",
-      location: { address_line_1: "Greater London House", address_line_2: "Hampstead Rd", city_state_zip: "London NW1 7FB, United Kingdom" },
-      hospital: { name: "University College Hospital", address: "235 Euston Rd, London NW1 2BU", phone: "020 3456 7890" },
+      location: { address_line_1: "Sample House", address_line_2: "123 Example Rd", city_state_zip: "London NW1 0AA, United Kingdom" },
+      hospital: { name: "General Hospital", address: "1 Example Rd, London NW1 0BB", phone: "020 0000 0000" },
       first_shot: "10:00 AM", wrap: "6:00 PM", lunch: "12:00 PM", sunrise: "7:25 AM", sunset: "5:02 PM", weather: "48°F, partly cloudy",
-      parking: "Limited street parking. Loading at front, then NCP Euston Garage (5 min walk).",
-      building_access: "Reception on Ground Floor. Sign in for Grace Beatty, badge to Floor 4.",
+      parking: "Limited street parking. Loading at front, then Example Garage (5 min walk).",
+      building_access: "Reception on Ground Floor. Sign in for Riley Stone, badge to Floor 4.",
       on_site_contacts: [
-        { name: "Alex Perrault", role: "Director", phone: "+1 206-919-0160" },
-        { name: "Cathleen Alexander", role: "Producer", phone: "+1 213-864-8680" },
+        { name: "Jordan Rivers", role: "Director", phone: "+1 555-010-0100" },
+        { name: "Morgan Blake", role: "Producer", phone: "+1 555-010-0101" },
       ],
       schedule: [
         { time: "8:00 AM", activity: "Crew arrives, load in", location: "Location A", talent: "Crew", notes: "" },
-        { time: "10:00 AM", activity: "INTERVIEW 1", location: "Location A", talent: "Dylan Morley", notes: "Interview + B-roll" },
+        { time: "10:00 AM", activity: "INTERVIEW 1", location: "Location A", talent: "Jamie Fox", notes: "Interview + B-roll" },
         { time: "12:00 PM", activity: "Lunch", location: "On site", talent: "All", notes: "" },
         { time: "5:00 PM", activity: "Wrap, break down, load out", location: "Both", talent: "All crew", notes: "" },
       ],
